@@ -9,37 +9,57 @@ export default function Affiliates() {
   const [submitted, setSubmitted] = useState(false);
   const [email, setEmail] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: "Affiliate Partner Candidate",
+          email: email,
+          subject: "Affiliate Program Application",
+          message: "Partner request to join the VancedGames affiliates program.",
+          inquiryType: "affiliate"
+        })
+      });
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        alert("Affiliate registration failed.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred during submission.");
+    }
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <div className="flex min-h-screen flex-col theme-bg">
       <Header />
 
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col px-4 py-16 sm:px-6">
-        <section className="rounded-3xl border border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-900/40 p-6 sm:p-10 backdrop-blur shadow-sm text-center">
+        <section className="rounded-3xl border theme-card p-6 sm:p-10 backdrop-blur shadow-sm text-center">
           <h1 className="text-3xl font-black bg-gradient-to-r from-cyan-400 to-indigo-500 bg-clip-text text-transparent mb-4 uppercase tracking-tight">
             Affiliate Program
           </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mb-8 max-w-md mx-auto leading-relaxed">
+          <p className="text-xs theme-text-secondary mb-8 max-w-md mx-auto leading-relaxed">
             Partner with VancedGames and monetize your website traffic by distributing our lightweight casual HTML5 games collections.
           </p>
           
           <div className="grid gap-6 sm:grid-cols-2 text-left mb-8">
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-slate-50/40 dark:bg-slate-950/20">
+            <div className="rounded-2xl border theme-card p-5">
               <span className="text-xl">💰</span>
-              <h3 className="font-bold text-slate-800 dark:text-slate-200 mt-2 text-sm">Revenue Share</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+              <h3 className="font-bold theme-text-primary mt-2 text-sm">Revenue Share</h3>
+              <p className="text-xs theme-text-secondary mt-1 leading-relaxed">
                 Earn competitive revenue splits on ad impressions driven by users originating from your referral integrations.
               </p>
             </div>
             
-            <div className="rounded-2xl border border-slate-200 dark:border-slate-800 p-5 bg-slate-50/40 dark:bg-slate-950/20">
+            <div className="rounded-2xl border theme-card p-5">
               <span className="text-xl">🛠️</span>
-              <h3 className="font-bold text-slate-800 dark:text-slate-200 mt-2 text-sm">Clean SDK &amp; API</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+              <h3 className="font-bold theme-text-primary mt-2 text-sm">Clean SDK &amp; API</h3>
+              <p className="text-xs theme-text-secondary mt-1 leading-relaxed">
                 Easily integrate our games feed using simple JSON feeds, embed codes, and customized brand wrappers.
               </p>
             </div>
@@ -58,7 +78,7 @@ export default function Affiliates() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 px-4 py-3 text-xs text-slate-800 dark:text-slate-100 outline-none focus:border-cyan-500/50"
+                  className="flex-1 rounded-xl border theme-card bg-background px-4 py-3 text-xs theme-text-primary outline-none focus:border-cyan-500/50"
                 />
                 <button
                   type="submit"
@@ -70,10 +90,16 @@ export default function Affiliates() {
             </form>
           )}
 
-          <div className="mt-8 text-center border-t border-slate-100 dark:border-slate-900 pt-6">
+          <div className="mt-8 text-center border-t border-card-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <Link
+              href="/contact?type=affiliate"
+              className="text-xs font-bold text-cyan-600 dark:text-cyan-400 hover:underline"
+            >
+              ✉ Need help? Contact Affiliate Support &rarr;
+            </Link>
             <Link
               href="/"
-              className="text-xs font-bold text-cyan-600 dark:text-cyan-400 hover:underline"
+              className="text-xs font-bold text-text-secondary hover:underline"
             >
               &larr; Return to Portal
             </Link>

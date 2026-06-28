@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { GAMES, getRandomGameSlug } from "@/data/gamesData";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Image from "next/image";
 
 export default function Home() {
   const router = useRouter();
@@ -19,7 +18,7 @@ export default function Home() {
   const filteredGames = GAMES;
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <div className="flex min-h-screen flex-col theme-bg">
       
       {/* Dots Background overlay */}
       <div className="pointer-events-none fixed inset-0 z-0 opacity-[0.03] dark:opacity-[0.015] bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.15),transparent)] dark:bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.08),transparent)]" />
@@ -43,68 +42,58 @@ export default function Home() {
           </button>
 
           {/* Title */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-950 dark:text-white leading-[1.15]">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight theme-text-primary leading-[1.15]">
             Free online games for everyone
           </h1>
 
           {/* Subtitle */}
-          <p className="mt-4 text-sm sm:text-base text-slate-500 dark:text-slate-400 leading-relaxed max-w-xl">
+          <p className="mt-4 text-sm sm:text-base theme-text-secondary leading-relaxed max-w-xl">
             <strong className="font-bold text-cyan-600 dark:text-cyan-400">VancedGames</strong> is your home for casual and arcade-style games. Pick a title, play instantly in your browser, and come back anytime for new additions.
           </p>
 
         </section>
 
-       
+
 
         {/* Games Cards Grid */}
         <section className="mb-16">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg font-black text-slate-950 dark:text-white uppercase tracking-tight">
+            <h2 className="text-lg font-black theme-text-primary uppercase tracking-tight">
               Popular Titles
             </h2>
-            <span className="text-xs text-slate-400 font-bold">{filteredGames.length} titles</span>
+            <span className="text-xs theme-text-secondary font-bold">{filteredGames.length} titles</span>
           </div>
 
-          {filteredGames.length === 0 ? (
-            <div className="rounded-3xl border border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-900/20 p-12 text-center shadow-sm">
-              <span className="text-4xl">🔍</span>
-              <h3 className="mt-4 font-bold text-slate-700 dark:text-slate-300">No matching titles</h3>
-              <p className="text-sm text-slate-400 dark:text-slate-500 mt-1">Try expanding your search query or switching categories!</p>
-            </div>
-          ) : (
-            <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {filteredGames.map((game) => (
-                <Link
-                  key={game.slug}
-                  href={`/game/${game.slug}`}
-                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-900 bg-white dark:bg-slate-900/40 hover:-translate-y-1 hover:border-cyan-500/30 dark:hover:border-cyan-500/20 hover:shadow-lg dark:hover:shadow-cyan-500/5 transition-all duration-300"
-                >
-                  {/* Thumbnail Wrapper */}
-                  <div className="relative aspect-square w-full overflow-hidden bg-slate-100 dark:bg-slate-950">
-                    <Image
-                      src={game.thumbnail}
-                      alt={game.title}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
-                      width={300}
-                      height={300}
-                    />
-                  </div>
+          <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            {filteredGames.map((game) => (
+              <Link
+                key={game.slug}
+                href={`/game/${game.slug}`}
+                className="group relative flex flex-col overflow-hidden rounded-2xl border theme-card hover:-translate-y-1 hover:border-cyan-500/30 dark:hover:border-cyan-500/20 hover:shadow-lg dark:hover:shadow-cyan-500/5 transition-all duration-300"
+              >
+                {/* Thumbnail Wrapper */}
+                <div className="relative aspect-square w-full overflow-hidden bg-slate-100 dark:bg-slate-950">
+                  <img
+                    src={game.thumbnail}
+                    alt={game.title}
+                    className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
 
-                  {/* Title details */}
-                  <div className="p-3 border-t border-slate-100 dark:border-slate-900 flex-1 flex flex-col justify-between">
-                    <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-cyan-500 dark:group-hover:text-cyan-400 transition-colors uppercase truncate">
-                      {game.title}
-                    </h3>
-                    <div className="mt-1 flex items-center justify-between text-[9px] font-bold text-slate-400 uppercase tracking-wide">
-                      <span>★ {game.rating.toFixed(1)}</span>
-                      <span className="text-cyan-600 dark:text-cyan-500 group-hover:translate-x-0.5 transition-transform">Play &rarr;</span>
-                    </div>
+                {/* Title details */}
+                <div className="p-3 border-t theme-card flex-1 flex flex-col justify-between">
+                  <h3 className="text-xs font-bold theme-text-primary group-hover:text-cyan-500 dark:group-hover:text-cyan-400 transition-colors uppercase truncate">
+                    {game.title}
+                  </h3>
+                  <div className="mt-1 flex items-center justify-between text-[9px] font-bold theme-text-secondary uppercase tracking-wide">
+                    <span>★ {game.rating.toFixed(1)}</span>
+                    <span className="text-cyan-600 dark:text-cyan-500 group-hover:translate-x-0.5 transition-transform">Play &rarr;</span>
                   </div>
-                </Link>
-              ))}
-            </div>
-          )}
+                </div>
+              </Link>
+            ))}
+          </div>
         </section>
 
       </main>

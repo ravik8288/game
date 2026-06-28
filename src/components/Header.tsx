@@ -14,8 +14,14 @@ export default function Header() {
   // Sync theme with local storage & document attribute
   useEffect(() => {
     const savedTheme = localStorage.getItem("data-theme") || "dark";
-    setIsThemeDark(savedTheme === "dark");
+    const isDark = savedTheme === "dark";
+    setIsThemeDark(isDark);
     document.documentElement.setAttribute("data-theme", savedTheme);
+    if (isDark) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }, []);
 
   const toggleTheme = () => {
@@ -23,6 +29,11 @@ export default function Header() {
     setIsThemeDark(!isThemeDark);
     localStorage.setItem("data-theme", nextTheme);
     document.documentElement.setAttribute("data-theme", nextTheme);
+    if (nextTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   };
 
   const playRandomGame = () => {
@@ -40,7 +51,7 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200/5 dark:border-slate-800/40 bg-slate-50/75 dark:bg-slate-950/75 backdrop-blur-md transition-colors duration-300">
+    <header className="sticky top-0 z-40 w-full border-b theme-header backdrop-blur-md transition-colors duration-300">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         
         {/* Left Side: Brand Wordmark */}
@@ -53,7 +64,7 @@ export default function Header() {
         </div>
 
         {/* Center: Navigation Links (Desktop) */}
-        <nav className="hidden md:flex items-center gap-1.5 rounded-full border border-slate-200/50 dark:border-slate-800 bg-slate-100/50 dark:bg-slate-900/60 p-1 backdrop-blur shadow-sm">
+        <nav className="hidden md:flex items-center gap-1.5 rounded-full border theme-nav-bg p-1 backdrop-blur shadow-sm transition-colors duration-300">
           {navItems.map((item) => {
             const isActive = item.isHome ? pathname === "/" : pathname.startsWith(item.href);
             return (
@@ -63,7 +74,7 @@ export default function Header() {
                 className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all duration-300 ${
                   isActive
                     ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/25 scale-105"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+                    : "theme-text-secondary hover:theme-text-primary"
                 }`}
               >
                 {item.label}
@@ -88,7 +99,7 @@ export default function Header() {
           <button
             onClick={toggleTheme}
             type="button"
-            className="rounded-full border border-slate-200 dark:border-slate-800/80 bg-slate-100/50 dark:bg-slate-900/60 p-2 text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-slate-200"
+            className="rounded-full border theme-nav-bg p-2 theme-text-secondary hover:theme-text-primary transition-colors duration-300"
             aria-label="Switch theme mode"
           >
             {isThemeDark ? (
@@ -106,7 +117,7 @@ export default function Header() {
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             type="button"
-            className="rounded-full p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900/60 hover:text-slate-950 dark:hover:text-slate-200 md:hidden"
+            className="rounded-full p-2 theme-text-secondary hover:bg-slate-100/40 dark:hover:bg-slate-900/30 hover:theme-text-primary md:hidden transition-colors"
             aria-label="Open primary menu"
           >
             <span className="text-xl">☰</span>
@@ -117,7 +128,7 @@ export default function Header() {
 
       {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-200/50 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 p-4 transition-colors duration-300">
+        <div className="md:hidden border-t theme-header theme-bg p-4 transition-colors duration-300">
           <nav className="flex flex-col gap-2">
             {navItems.map((item) => {
               const isActive = item.isHome ? pathname === "/" : pathname.startsWith(item.href);
@@ -129,7 +140,7 @@ export default function Header() {
                   className={`rounded-xl px-4 py-2 text-sm font-bold transition-all ${
                     isActive
                       ? "bg-cyan-500 text-slate-950"
-                      : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900/60"
+                      : "theme-text-secondary hover:bg-slate-100/40 dark:hover:bg-slate-900/30"
                   }`}
                 >
                   {item.label}

@@ -1,18 +1,95 @@
 @import "tailwindcss";
 
 :root {
-  --background: #020617;
-  --foreground: #f8fafc;
+  --background: #f1f5f9;
+  --foreground: #020617;
 }
 
 @theme inline {
+  --variant-dark: selector(.dark);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Core theme styles */
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: var(--font-sans);
+  background-color: #f1f5f9;
+  color: #0f172a;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.dark body {
+  background-color: #090d16;
+  color: #f8fafc;
+}
+
+/* Custom Semantic Theme Classes - Borders Removed */
+.theme-bg {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+html.dark .theme-bg {
+  background-color: #090d16;
+  color: #f8fafc;
+}
+
+.theme-card {
+  background-color: #ffffff;
+  border-color: transparent; /* Borders removed */
+  color: #0f172a;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+html.dark .theme-card {
+  background-color: rgba(15, 23, 42, 0.4);
+  border-color: transparent; /* Borders removed */
+  color: #f8fafc;
+}
+
+.theme-text-primary {
+  color: #0f172a;
+  transition: color 0.3s ease;
+}
+html.dark .theme-text-primary {
+  color: #ffffff;
+}
+
+.theme-text-secondary {
+  color: #475569;
+  transition: color 0.3s ease;
+}
+html.dark .theme-text-secondary {
+  color: #94a3b8;
+}
+
+.theme-header {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-color: transparent; /* Borders removed */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+html.dark .theme-header {
+  background-color: rgba(9, 13, 22, 0.85);
+  border-color: transparent; /* Borders removed */
+}
+
+.theme-footer {
+  background-color: #e2e8f0;
+  border-color: transparent; /* Borders removed */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+html.dark .theme-footer {
+  background-color: rgba(15, 23, 42, 0.3);
+  border-color: transparent; /* Borders removed */
+}
+
+.theme-nav-bg {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-color: transparent; /* Borders removed */
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+html.dark .theme-nav-bg {
+  background-color: rgba(15, 23, 42, 0.6);
+  border-color: transparent; /* Borders removed */
 }
