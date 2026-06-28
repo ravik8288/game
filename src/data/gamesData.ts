@@ -10,7 +10,6 @@ export interface Game {
 }
 
 const GAME_DEFS = [
-  { slug: "coconut-catch", title: "coconut catch" },
   { slug: "concrete-rush", title: "concrete rush" },
   { slug: "frost-fire-dragon", title: "frost fire dragon" },
   { slug: "munchy-monster", title: "munchy monster" },
@@ -102,7 +101,6 @@ const GAME_DEFS = [
 
 function getThumbnailPath(slug: string): string {
   const dashSlugs = [
-    "coconut-catch",
     "concrete-rush",
     "frost-fire-dragon",
     "munchy-monster",
@@ -120,6 +118,25 @@ function getThumbnailPath(slug: string): string {
   return `https://vancedgames.com/images/jpg/${underSlug}.jpg`;
 }
 
+function getPlayUrl(slug: string): string {
+  const dashSlugs = [
+    "concrete-rush",
+    "frost-fire-dragon",
+    "munchy-monster",
+    "pearl-blaster",
+    "basketarena",
+    "goalkeeper",
+    "princess-dress-up",
+    "snow-riders",
+    "water-color-sort"
+  ];
+  if (dashSlugs.includes(slug)) {
+    return `https://vancedgames.com/games/${slug}/index.html`;
+  }
+  const underSlug = slug.replace(/-/g, "_");
+  return `https://vancedgames.com/games/${underSlug}/index.html`;
+}
+
 function generateDescription(title: string): string[] {
   return [
     `${title.charAt(0).toUpperCase() + title.slice(1)} is a fun casual online game that tests your reflexes and coordination.`,
@@ -130,7 +147,6 @@ function generateDescription(title: string): string[] {
 }
 
 export const GAMES: Game[] = GAME_DEFS.map((g) => {
-  // Deterministic ratings/reviews based on name lengths
   const rating = 8.5 + ((g.title.length + g.slug.length) % 15) * 0.1;
   const reviews = 35 + ((g.slug.length * g.title.length) % 25) * 8;
 
@@ -153,7 +169,7 @@ export const GAMES: Game[] = GAME_DEFS.map((g) => {
     categories,
     description: generateDescription(g.title),
     thumbnail: getThumbnailPath(g.slug),
-    playUrl: `https://vancedgames.com/games/${g.slug}/index.html`
+    playUrl: getPlayUrl(g.slug)
   };
 });
 
