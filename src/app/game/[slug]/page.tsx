@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { GAMES, Game } from "@/data/gamesData";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Image from "next/image";
 
 export default function GameDetails() {
   const { slug } = useParams();
@@ -14,6 +15,17 @@ export default function GameDetails() {
   const [isPlaying, setIsPlaying] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [iframeLoading, setIframeLoading] = useState(true);
+  const [isLocalhost, setIsLocalhost] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsLocalhost(
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1"
+      );
+    }
+  }, []);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -99,12 +111,29 @@ export default function GameDetails() {
                 ref={containerRef}
                 className="relative w-full aspect-video rounded-3xl border theme-card bg-black overflow-hidden shadow-2xl"
               >
+                {iframeLoading && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950 z-20 text-slate-200">
+                    <div className="h-10 w-10 rounded-full border-4 border-cyan-500/20 border-t-cyan-500 animate-spin" />
+                    <span className="mt-4 text-xs font-bold uppercase tracking-wider text-cyan-400">Loading game assets...</span>
+                    <a
+                      href={game.playUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-6 rounded-xl border border-slate-700 bg-slate-900/60 px-4 py-2 text-[10px] font-bold text-slate-400 hover:text-white hover:border-slate-500 transition-all"
+                    >
+                      ↗ Play in New Tab
+                    </a>
+                  </div>
+                )}
+
                 <iframe
                   src={game.playUrl}
                   title={game.title}
-                  className="h-full w-full border-none"
+                  onLoad={() => setIframeLoading(false)}
+                  className={`h-full w-full border-none transition-opacity duration-500 ${iframeLoading ? "opacity-0" : "opacity-100"}`}
                   allowFullScreen
                   scrolling="no"
+                  sandbox={isLocalhost ? undefined : "allow-scripts allow-same-origin allow-pointer-lock allow-forms"}
                 />
                 
                 {/* Embedded controls overlay */}
@@ -128,17 +157,21 @@ export default function GameDetails() {
             ) : (
               <div className="relative w-full aspect-video rounded-3xl border theme-card p-6 flex flex-col justify-center items-center overflow-hidden shadow-sm">
                 {/* Background image blur */}
-                <img
+                <Image
                   src={game.thumbnail}
                   alt=""
+                  fill
+                  sizes="100vw"
                   className="absolute inset-0 h-full w-full object-cover blur-2xl opacity-20 dark:opacity-10 scale-110 pointer-events-none"
                 />
 
                 <div className="relative z-10 flex flex-col items-center text-center">
-                  <div className="h-24 w-24 rounded-2xl border theme-card overflow-hidden shadow-md">
-                    <img
+                  <div className="h-24 w-24 relative rounded-2xl border theme-card overflow-hidden shadow-md">
+                    <Image
                       src={game.thumbnail}
                       alt={game.title}
+                      fill
+                      sizes="96px"
                       className="h-full w-full object-cover"
                     />
                   </div>
@@ -155,7 +188,10 @@ export default function GameDetails() {
 
                   {/* Play Action Button */}
                   <button
-                    onClick={() => setIsPlaying(true)}
+                    onClick={() => {
+                      setIsPlaying(true);
+                      setIframeLoading(true);
+                    }}
                     type="button"
                     className="mt-6 inline-flex items-center gap-2 rounded-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-8 py-3 text-xs font-black shadow-lg shadow-cyan-500/20 active:scale-95 transition-all select-none"
                   >
@@ -211,9 +247,11 @@ export default function GameDetails() {
               >
                 {/* Thumbnail Wrapper */}
                 <div className="relative aspect-square w-full overflow-hidden bg-slate-100 dark:bg-slate-950">
-                  <img
+                  <Image
                     src={rec.thumbnail}
                     alt={rec.title}
+                    fill
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 25vw"
                     className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                     loading="lazy"
                   />
